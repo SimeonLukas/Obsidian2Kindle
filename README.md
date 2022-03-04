@@ -31,6 +31,8 @@ Linux: Install it via apt
 sudo apt-get install php8.0-gd
 ```
 
+Start yout local Server:
+
 ```shell 
 $ cd ~/ob2ki-directory
 $ php -S localhost:8000
