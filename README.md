@@ -1,6 +1,6 @@
 # Project 2: Obsidian2Kindle - Converter
 A Converter written in PHP to convert .md Files from Obsidian to mobi and sending it to your Kindle.
-It is used as Backend for the Plugin obsidian-kindle-export.
+It is used as Backend for the Plugin https://github.com/SimeonLukas/obsidian-kindle-export.
 
 ## I used great Libraries:
 https://github.com/PHPMailer/PHPMailer
