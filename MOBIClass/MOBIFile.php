@@ -23,7 +23,7 @@ class MOBIFile extends ContentProvider
      */
     public function getTextData()
     {
-        $prefix = "<html><head><guide><reference title='CONTENT' type='toc' filepos=0000000000 /></guide></head><body>";
+        $prefix = "<html lang='de' ><head><guide><reference title='CONTENT' type='toc' filepos=0000000000 /></guide></head><body>";
 
         $title = '<h1>'.$this->settings['title'].'</h1>';
 

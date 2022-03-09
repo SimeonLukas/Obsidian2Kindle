@@ -59,7 +59,12 @@ class Http
         $req .= 'Host: '.$ip.$crlf;
         $req .= 'User-Agent: Mozilla/5.0 Firefox/3.6.12'.$crlf;
         $req .= 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'.$crlf;
-        $req .= 'Accept-Language: en-us,en;q=0.5'.$crlf;
+        if ($POST['lang'] != 'de') {
+            $req .= 'Accept-Language: en-us,en;q=0.5'.$crlf;
+        }else {
+            $req .= 'Accept-Language: de-de,de;q=0.3'.$crlf;
+            
+        }
         $req .= 'Accept-Encoding: deflate'.$crlf;
         $req .= 'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7'.$crlf;
 

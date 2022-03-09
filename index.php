@@ -14,7 +14,7 @@ $allowedOrigins = [
  } else {
      $http_origin = "app://obsidian.md";
  }
-header("Access-Control-Allow-Origin: $http_origin");
+ header("Access-Control-Allow-Origin: $http_origin");
 header("Access-Control-Allow-Headers: Content-Type, origin");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -27,12 +27,19 @@ $Parsedown = new Parsedown();
 $date = date('d.m.y H-i-s');
 $text = $Parsedown->text($_POST['text']);
 $_POST['text'] = $text;
-// Alle Bilder werden decodiert und in Uploads gespeichert!
+
+// $file = fopen("debug.log", "w");
+// fwrite($file, $text);
+// fclose($file);
+
+
+if ($_POST['Bilder'] != ''){
+
 $Bilder = explode(',', $_POST['Bilder']);
 for ($i = 0; $i < count($Bilder); $i++) {
      file_put_contents('uploads/'.$Bilder[$i], base64_decode($_POST['file'.$i]));
     }
-
+}
 // add unique id to the h1, h2, h3
 $text = preg_replace_callback('/<h([1-3])>(.*?)<\/h[1-3]>/', function($matches1) {
     $id = 'title_'.uniqid();
@@ -55,11 +62,12 @@ preg_replace_callback('/<h([1-3]) id="(.*?)">(.*?)<\/h[1-3]>/', function($matche
     $toc .= '<br><a href="#'.$matches3[2].'" filepos="'.$pos.'">'.$matches3[3].'</a>';
 }, $text);
 
-// add to any filepos attribute the length of toc
-$toc = preg_replace_callback('/filepos="(.*?)"/', function($matches4) use (&$toc) {
+
+if ($_POST['toc'] == 'true' && str_contains($text, '<h1>') == true) {
+    $toc = preg_replace_callback('/filepos="(.*?)"/', function($matches4) use (&$toc) {
     $pos = $matches4[1] + strlen($toc) + strlen($_POST['title']) + 130;
     return 'filepos="'.$pos.'"';
-}, $toc);
+}, $toc); }
 
 $_POST['text'] = $text;
 
@@ -83,20 +91,27 @@ $mobi = new MOBI();
 
 
         if ($_POST['toc'] == 'true') {
-            $content->appendParagraph("<h2>Ihnalt</h2>");
+            if ($_POST['lang'] != 'de') {
+                $content->appendParagraph("<h2>Content</h2>");
+            } else {
+                $content->appendParagraph("<h2>Inhalt</h2>");
+            }
             $content->appendParagraph("<h4>" . $toc . "</h4>");
             $content->appendPageBreak();
         }
         else{}
 
         // text split by images
-        $text = explode('<img', $_POST['text']);
+        $text = explode('<img ', $_POST['text']);
         for ($i = 0; $i < count($text); $i++) {
             if ($i == 0) {
                 $content->appendParagraph($text[$i]);
             } else {
-                // get image and convert to true color
-                $content->appendImage(imagecreatefromstring(file_get_contents('uploads/'.$Bilder[$i-1])));
+                // get link of src attribute of image
+                $src = explode('src="', $text[$i]);
+                $src = explode('"', $src[1]);
+                $src = $src[0];
+                $content->appendImage(imagecreatefromstring(file_get_contents($src)));
                 // remove everything to >
                 $text[$i] = substr($text[$i], strpos($text[$i], '>') + 1);
                 $content->appendParagraph($text[$i]);
@@ -147,7 +162,11 @@ $mobi = new MOBI();
                 $mail->Subject = $_POST['title'];
                 $mail->Body    = ' ';
                 $mail->send();
-                echo '👍 Ebook is sent to your Kindle!';
+                if ($_POST['lang'] != 'de') {
+                    echo '👍 Your Ebook has been sent to your kindle!';
+                } else {
+                    echo '👍 Ebook wurde versandt!';
+                }               
                 unlink($_POST['title'].'.mobi');
                 // unlink folder
                 $files = glob('uploads/*'); // get all file names
@@ -156,11 +175,14 @@ $mobi = new MOBI();
                         unlink($file); // delete file
                 }
             } catch (Exception $e) {
-                echo "😢 Ebook is not sent! Error: {$mail->ErrorInfo}"; }
-
+                if ($_POST['lang'] != 'de') {
+                    echo "👎 Your Ebook could not be sent to your kindle!Error: {$mail->ErrorInfo}";
+                } else {
+                    echo "👎 Ebook wurde nicht versandt! Error: {$mail->ErrorInfo}" ;
+                }
             }
 
-
+        }
 
         die;
 ?>
