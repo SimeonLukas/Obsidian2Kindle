@@ -180,6 +180,13 @@ $mobi = new MOBI();
                 } else {
                     echo "👎 Ebook wurde nicht versandt! Error: {$mail->ErrorInfo}" ;
                 }
+                unlink($_POST['title'].'.mobi');
+                // unlink folder
+                $files = glob('uploads/*'); // get all file names
+                foreach($files as $file){ // iterate files
+                    if(is_file($file))
+                        unlink($file); // delete file
+                }
             }
 
         }
