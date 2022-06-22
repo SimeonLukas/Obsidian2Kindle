@@ -23,7 +23,12 @@ https://www.php.net/manual/en/image.installation.php
 ### Host it local:
 Install PHP on your System --> https://www.php.net/manual/de/install.php
 
-Win: Include php_gd in your php.ini
+Win: Include 
+1. extension=openssl
+2. extension=mbstring
+3. extension=mysqli
+4. extension=gd
+in your php.ini
 
 Linux: Install it via apt
 
