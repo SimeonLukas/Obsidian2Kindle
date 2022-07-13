@@ -1,0 +1,49 @@
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+}
+body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    text-align: justify;
+}
+img {
+    display: block !important;
+    margin: 0.5em auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+pre {
+    white-space: pre-wrap;
+    display: block;
+    margin: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+p , table{
+    margin: 0.3em;
+}
+table td, table th {
+    border-bottom: 1px solid #ccc;
+    font-size: 80%;
+    color: #444;
+    text-align: left;
+}
+
+pre{
+    font-family: monospace;
+    font-size: 0.8em;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 0.2em 0.4em;
+    white-space: pre;
+}
+
+.toc{
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
