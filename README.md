@@ -3,7 +3,7 @@
 Due to the changes of Amazon to the send-to-kindle feature, .mobi file won't work anymore.
 So now the backend is converting to .epub.
 I'm sorry but covers not working, there shown in the file but not on the bookshelf.
-
+## Info
 A Converter written in PHP to convert .md Files from Obsidian to .epub and sending it to your Kindle.
 It is used as Backend for the Plugin https://github.com/SimeonLukas/obsidian-kindle-export.
 
