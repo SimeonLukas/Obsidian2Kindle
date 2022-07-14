@@ -518,7 +518,7 @@ class TPEpubCreator
         $this->opf[] = '<dc:rights>' . $this->rights . '</dc:rights>' . "\r\n";
         $this->opf[] = '<dc:publisher>' . $this->publisher . '</dc:publisher>';
         $this->opf[] = '<dc:identifier id="BookID" opf:scheme="UUID">' . $this->uuid . '</dc:identifier>' . "\r\n";
-        $this->opf[] = '<meta name="cover" content="cover" />' . "\r\n";
+        $this->opf[] = '<meta name="cover" content="cover-image" />' . "\r\n";
         $this->opf[] = '</metadata><manifest>' . "\r\n";
         $this->opf[] = '<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />' . "\r\n";
         $this->opf[] = '<item id="style" href="css.css" media-type="text/css" />' . "\r\n";
