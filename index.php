@@ -52,6 +52,16 @@ $_POST['text'] = $text;
 
 $epub = new TPEpubCreator();
 
+if (!file_exists('uploads')) {
+    mkdir('uploads', 0777, true);
+}
+if (!file_exists('temp_folder')) {
+    mkdir('temp_folder', 0777, true);
+}
+if (!file_exists('epubs')) {
+    mkdir('epubs', 0777, true);
+}
+
 
 $epub->temp_folder = 'temp_folder/';
 $epub->epub_file = 'epubs/'. $_POST['title'] .'.epub';
