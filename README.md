@@ -34,12 +34,14 @@ Win: Include
 2. extension=mbstring
 3. extension=mysqli
 4. extension=gd
+5. extension=zip
 in your php.ini
 
 Linux: Install it via apt
 
 ```shell
-sudo apt-get install php8.0-gd
+sudo apt install php8.1-gd
+sudo apt install php8.1-zip
 ```
 
 Start yout local Server:
