@@ -24,6 +24,7 @@ Host the Files on your Server, and let the Plugin obsidian-kindle-export point t
 https://www.php.net/downloads
 2. The GD Image Library
 https://www.php.net/manual/en/image.installation.php
+3. The PHP-Zip extension.
 
 ### Host it local:
 Install PHP on your System --> https://www.php.net/manual/de/install.php
