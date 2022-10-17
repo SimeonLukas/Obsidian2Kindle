@@ -2,8 +2,8 @@
 // debug on
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-
 header('Content-Type: text/html; charset=utf-8');
+
 
 $allowedOrigins = [
     'http://localhost',
@@ -16,8 +16,22 @@ $allowedOrigins = [
  } else {
      $http_origin = "app://obsidian.md";
  }
- header("Access-Control-Allow-Origin: $http_origin");
+header("Access-Control-Allow-Origin: $http_origin");
 header("Access-Control-Allow-Headers: Content-Type, origin");
+
+
+// Check for extensions
+
+if (!extension_loaded('gd')) {
+    echo '❌ Error: Please install php extension: gd';
+    die;
+}
+
+if (!extension_loaded('zip')) {
+    echo '❌ Error: Please install php extension: zip';
+    die;
+}
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -35,17 +49,20 @@ $text = preg_replace_callback('/<h([1-3])>(.*?)<\/h[1-3]>/', function($matches1)
     $id = 'title_'.uniqid();
     return '<h'.$matches1[1].' id="'.$id.'">'.$matches1[2].'</h'.$matches1[1].'>';
 }, $text);
-
 // replace all carets
 $text = preg_replace('/\^(.*?)</', '<', $text);
 // replace all between &&
 $text = preg_replace('/%%(.*?)%%/', '', $text);
+// do the close tag after an image
+$text = preg_replace_callback('/<img(.*?)>/', function($image) {
+    return '<img' . $image[1]. '></img>';
+}, $text);
 // make links from headers
 $toc = '';
 $number = 1;
 preg_replace_callback('/<h([1-3]) id="(.*?)">(.*?)<\/h[1-3]>/', function($matches3) use (&$toc , &$number)  {
     $number = $number + 1;
-    $toc .= '<br><a href="page'.$number.'.xhtml">'.$matches3[3].'</a>';
+    $toc .= '<a href="page'.$number.'.xhtml">'.$matches3[3].'</a><br />';
 }, $text);
 
 $_POST['text'] = $text;
@@ -77,8 +94,9 @@ $epub->css = file_get_contents('base.css');
         
         $cover = imagecreatefromstring(file_get_contents('obsidian-kindle-export-2022.png'));
         $text_color = imagecolorallocate($cover, 0, 0, 0);
-        imagettftext($cover, 70, 0, 5, 100, $text_color, 'fonts/Roboto-Regular.ttf', $_POST['title']);
-        imagettftext($cover, 40, 90, 60, 600, $text_color, 'fonts/Roboto-Regular.ttf', $_POST['author']);
+        imagettftext($cover, 50, 0, 5, 220, $text_color, 'fonts/Tahu!.ttf', $_POST['title']);
+        imagettftext($cover, 40, 0, 5, 100, $text_color, 'fonts/Karu-ExtraLight.ttf', $_POST['author']);
+        imagettftext($cover, 30, 0, 5, 1550, $text_color, 'fonts/Karu-ExtraLight.ttf', 'OBSIDIAN');
         // save image to file
         imagepng($cover, 'uploads/obsidian-kindle-export-2022.png');
         $epub->AddImage( 'uploads/obsidian-kindle-export-2022.png', false, true );
@@ -97,9 +115,9 @@ $epub->css = file_get_contents('base.css');
 
         if ($_POST['toc'] == 'true') {
             if ($_POST['lang'] != 'de') {
-                 $epub->AddPage("<h1>Content</h1><span class='toc'>" . $toc . "</span><br>", false, 'Content' );
+                 $epub->AddPage("<h1>Content</h1>" . $toc , false, 'Content' );
             } else {
-                $epub->AddPage("<h1>Inhalt</h1><span class='toc'>" . $toc . "</span><br>", false, 'Inhalt' );
+                $epub->AddPage("<h1>Inhalt</h1>" . $toc , false, 'Inhalt' );
             }
         }
         else{}
@@ -168,7 +186,7 @@ foreach ($pages as $page) {
                         $mail->Body    = ' ';
                         $mail->send();
                         if ($_POST['lang'] != 'de') {
-                            echo '👍 Your Ebook has been sent to your kindle!';
+                            echo '👍 Your Ebook has been sent!';
                         } else {
                             echo '👍 Ebook wurde versandt!';
                         }               
@@ -178,18 +196,31 @@ foreach ($pages as $page) {
                             if(is_file($file))
                                 unlink($file); // delete file
                         }
-                    
+                        $file = fopen("counter.log", "a");
+                        fwrite($file, $date . "\n");
+                        $lines = file('counter.log');
+                        $count = count($lines);
+                        fclose($file);
+                        $file = fopen("counter", "w");
+                        fwrite($file, '
+                        {
+                            "schemaVersion": 1,
+                            "label": "Books exported",
+                            "message": "'.$count.'",
+                            "color": "brightgreen"
+                          }');
+                        fclose($file);
 
 
 
                     } catch (Exception $e) {
                         if ($_POST['lang'] != 'de') {
-                            echo "👎 Your Ebook could not be sent to your kindle! Just try it again!😊 Error: {$mail->ErrorInfo}";
+                            echo "👎 Your Ebook could not be sent! Just try it again!😊 Error: {$mail->ErrorInfo}";
                         } else {
                             echo "👎 Ebook wurde nicht versandt! Versuchs einfach nochmal!😊 Error: {$mail->ErrorInfo}" ;
                         }
                         unlink('epubs/' . $_POST['title'].'.epub');
-                        // delet all files in uploads folder
+                        // delete all files in uploads folder
                         $files = glob('uploads/*'); // get all file names
                         foreach($files as $file){ // iterate files
                             if(is_file($file))

@@ -382,7 +382,10 @@ class TPEpubCreator
                 // We'll try to get it
                 if ( ! $image_type ) {
                     $image_type = getimagesize( $image_value['path'] );
+                    if (!str_contains(basename( $new_image ), '.mp3'))
+                    {
                     $image_type = $image_type['mime'];
+                }
                 }
                 
                 // Try to copy the image
@@ -391,13 +394,13 @@ class TPEpubCreator
                     return;
                 }
                 
-                // Set the new images name
+                // Set the new images name      
                 $this->new_images[$image_key]['path'] = $new_image;
                 
                 // If there is a cover, create another ID and XHTML page later
                 if ( ! empty( $image_value['cover'] ) ) {
                     $opf .= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />' . "\r\n";
-                    $opf .= '<item id="cover-image';
+                    $opf .= '<item id="cover-2022';
                     $this->cover_img = basename( $new_image );
                 } else {
                     $opf .= '<item id="img' . $image_key;
@@ -405,7 +408,12 @@ class TPEpubCreator
                 
                 // End the image <item> tag
                 $opf .= '" href="images/' . basename( $new_image );
-                $opf .= '" media-type="' . $image_type . '" />' . "\r\n";
+                if (!str_contains(basename( $new_image ), '.mp3'))
+                {
+                $opf .= '" media-type="' . $image_type . '" />' . "\r\n";}
+                else{
+                $opf .= '" media-type="audio/mpeg" />' . "\r\n";}
+                
             }           
         }
         
@@ -518,7 +526,7 @@ class TPEpubCreator
         $this->opf[] = '<dc:rights>' . $this->rights . '</dc:rights>' . "\r\n";
         $this->opf[] = '<dc:publisher>' . $this->publisher . '</dc:publisher>';
         $this->opf[] = '<dc:identifier id="BookID" opf:scheme="UUID">' . $this->uuid . '</dc:identifier>' . "\r\n";
-        $this->opf[] = '<meta name="cover" content="cover-image" />' . "\r\n";
+        $this->opf[] = '<meta name="cover" content="cover-2022" />' . "\r\n";
         $this->opf[] = '</metadata><manifest>' . "\r\n";
         $this->opf[] = '<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />' . "\r\n";
         $this->opf[] = '<item id="style" href="css.css" media-type="text/css" />' . "\r\n";
