@@ -39,7 +39,8 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 require 'TPEpubCreator.php';
 include 'parsedown.php';
-$Parsedown = new Parsedown();
+include 'parsdownExtra.php';
+$Parsedown = new ParsedownExtra();
 $date = date('d.m.y H-i-s');
 $text = $Parsedown->text($_POST['text']);
 $_POST['text'] = $text;
@@ -50,6 +51,7 @@ $text = preg_replace_callback('/<h([1-3])>(.*?)<\/h[1-3]>/', function($matches1)
     return '<h'.$matches1[1].' id="'.$id.'">'.$matches1[2].'</h'.$matches1[1].'>';
 }, $text);
 // replace all carets
+$text = preg_replace('/<div class="footnotes">\n<hr \/>/', '<div class="footnotes">', $text);
 $text = preg_replace('/\^(.*?)</', '<', $text);
 // replace all between &&
 $text = preg_replace('/%%(.*?)%%/', '', $text);
