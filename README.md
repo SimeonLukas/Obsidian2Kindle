@@ -14,6 +14,8 @@ https://github.com/luizomf/php-epub-creator
 
 https://github.com/erusev/parsedown
 
+https://github.com/erusev/parsedown-extra
+
 ## Use it:
 Host the Files on your Server, and let the Plugin obsidian-kindle-export point to it. <br>
 (See Settings for the Plugin and do not forget the **http://** Prefix)
