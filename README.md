@@ -46,6 +46,8 @@ sudo apt install php8.1-gd
 sudo apt install php8.1-zip
 ```
 
+[© Simeon Stanek](https://staneks.de)
+
 Start yout local Server:
 
 ```shell 
