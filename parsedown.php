@@ -538,6 +538,12 @@ class Parsedown
 
     protected function blockHeader($Line)
     {
+
+        //Check for Tags
+        if (strpos($Line['text'], '# ') === false)
+        {
+            return;
+        }
         $level = strspn($Line['text'], '#');
 
         if ($level > 6)
