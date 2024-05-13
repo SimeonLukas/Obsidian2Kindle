@@ -1,4 +1,4 @@
-# Project 2: Obsidian2Kindle - Converter
+# Obsidian2Kindle - Converter -> md2epub
 
 ## Info
 A Converter written in PHP to convert .md Files from Obsidian to .epub and sending it to your Kindle.
