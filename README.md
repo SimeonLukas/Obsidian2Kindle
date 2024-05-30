@@ -25,15 +25,39 @@ https://github.com/erusev/parsedown-extra
 Host the Files on your Server, and let the Plugin obsidian-kindle-export point to it. <br>
 (See Settings for the Plugin and do not forget the **http://** Prefix)
 
-## Dependencies you need:
+## Easy Installation with Docker
 
-1. PHP 8.x
+https://hub.docker.com/r/simeonstanek/md2epub
+
+Docker Image:
+
+```shell
+    docker pull simeonstanek/md2epub
+```
+
+
+Docker-Compose:
+
+```docker-compose.yml
+services:
+    server:
+        image: simeonstanek/md2epub:latest
+        restart: always
+        ports:
+            - 1234:80
+
+```
+
+## Use without Docker:
+### Dependencies you need:
+
+1. PHP 8.x  
 https://www.php.net/downloads
-2. The GD Image Library
+2. The GD Image Library  
 https://www.php.net/manual/en/image.installation.php
 3. The PHP-Zip extension.
 
-### Host it local:
+### Host it local?
 Install PHP on your System --> https://www.php.net/manual/de/install.php
 
 Win: Include 
@@ -50,8 +74,6 @@ Linux: Install it via apt
 sudo apt install php8.1-gd
 sudo apt install php8.1-zip
 ```
-
-[© Simeon Stanek](https://staneks.de)
 
 Start yout local Server:
 
